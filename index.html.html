@@ -1,0 +1,894 @@
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --ink: #2A2620;
+    --paper: #F3ECDC;
+    --paper-shadow: #DCD2B8;
+    --bg: #171512;
+    --surface: #211E1A;
+    --surface-2: #2A2620;
+    --red: #B23A2E;
+    --red-bright: #C94A3C;
+    --blue: #3A5A6E;
+    --gold: #C69B4E;
+    --muted: #A69E8E;
+    --line: #3A362F;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background:
+      radial-gradient(ellipse 900px 600px at 50% -10%, rgba(178,58,46,0.10), transparent 60%),
+      var(--bg);
+    color: var(--paper);
+    font-family: 'IBM Plex Sans', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    min-height: 100vh;
+  }
+
+  .app {
+    max-width: 480px;
+    margin: 0 auto;
+    padding: 24px 20px 60px;
+    position: relative;
+  }
+
+  .top-banner {
+    height: 5px;
+    background: repeating-linear-gradient(
+      -45deg,
+      var(--red) 0 14px,
+      var(--paper) 14px 28px,
+      var(--blue) 28px 42px
+    );
+    margin: -24px -20px 24px;
+  }
+
+  /* ---------- header ---------- */
+  .pole {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: repeating-linear-gradient(
+      45deg,
+      var(--red) 0 6px,
+      var(--paper) 6px 12px,
+      var(--blue) 12px 18px
+    );
+    background-size: 100% 300%;
+    animation: spin-stripes 1.8s linear infinite;
+    flex-shrink: 0;
+    box-shadow: inset 0 0 0 1.5px rgba(0,0,0,0.4);
+  }
+  @keyframes spin-stripes {
+    from { background-position: 0 0; }
+    to { background-position: 0 100%; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .pole { animation: none; }
+  }
+
+  header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 22px;
+  }
+  header h1 {
+    font-family: 'Anton', sans-serif;
+    font-weight: 400;
+    font-size: 22px;
+    letter-spacing: 0.02em;
+    margin: 0;
+    text-transform: uppercase;
+  }
+  header .tag {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    margin-left: auto;
+    text-align: right;
+    line-height: 1.3;
+  }
+
+  /* ---------- toggle ---------- */
+  .switcher {
+    display: flex;
+    background: var(--surface);
+    border-radius: 999px;
+    padding: 4px;
+    margin-bottom: 28px;
+    border: 1px solid var(--line);
+  }
+  .switcher button {
+    flex: 1;
+    border: none;
+    background: transparent;
+    color: var(--muted);
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 600;
+    font-size: 13px;
+    padding: 10px 12px;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: background 0.25s ease, color 0.25s ease;
+    letter-spacing: 0.01em;
+  }
+  .switcher button.active {
+    background: var(--paper);
+    color: var(--ink);
+  }
+
+  section { display: none; }
+  section.active { display: block; animation: fade-in 0.35s ease; }
+  @keyframes fade-in {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .eyebrow {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--gold);
+    margin: 0 0 6px;
+  }
+  .section-title {
+    font-family: 'Anton', sans-serif;
+    font-weight: 400;
+    font-size: 26px;
+    margin: 0 0 20px;
+    text-transform: uppercase;
+    line-height: 1.1;
+  }
+
+  /* ---------- ticket stub (signature element) ---------- */
+  .ticket {
+    background: var(--paper);
+    color: var(--ink);
+    border-radius: 10px;
+    position: relative;
+    padding: 22px 22px 20px;
+    box-shadow: 0 14px 30px -14px rgba(0,0,0,0.6);
+    overflow: hidden;
+  }
+  .ticket::after,
+  .ticket .grain {
+    pointer-events: none;
+  }
+  .ticket .grain {
+    position: absolute;
+    inset: 0;
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg"><filter id="n"><feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" stitchTiles="stitch"/><feColorMatrix type="saturate" values="0"/></filter><rect width="100%" height="100%" filter="url(%23n)"/></svg>');
+    opacity: 0.05;
+    mix-blend-mode: multiply;
+  }
+  .stamp {
+    position: absolute;
+    bottom: 12px;
+    right: -6px;
+    width: 74px;
+    height: 74px;
+    border: 1.5px solid var(--red);
+    border-radius: 50%;
+    color: var(--red);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    transform: rotate(-11deg);
+    opacity: 0.55;
+    mix-blend-mode: multiply;
+  }
+  .stamp .s1 {
+    font-family: 'Anton', sans-serif;
+    font-size: 15px;
+    letter-spacing: 0.04em;
+    line-height: 1;
+  }
+  .stamp .s2 {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 6.5px;
+    letter-spacing: 0.06em;
+    margin-top: 3px;
+    text-transform: uppercase;
+  }
+  .ticket::before,
+  .ticket::after {
+    content: "";
+    position: absolute;
+    width: 22px;
+    height: 22px;
+    background: var(--bg);
+    border-radius: 50%;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+  .ticket::before { left: -11px; }
+  .ticket::after { right: -11px; }
+  .ticket .perf {
+    position: absolute;
+    top: 0; bottom: 0;
+    left: 78px;
+    border-left: 2px dashed var(--paper-shadow);
+  }
+  .ticket-row {
+    display: flex;
+    align-items: stretch;
+  }
+  .ticket-num-col {
+    width: 78px;
+    padding-right: 16px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .ticket-num {
+    font-family: 'Anton', sans-serif;
+    font-size: 40px;
+    line-height: 0.9;
+  }
+  .ticket-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--red);
+    margin-top: 4px;
+  }
+  .ticket-info-col {
+    flex: 1;
+    padding-left: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 4px;
+  }
+  .ticket-info-col .name {
+    font-weight: 700;
+    font-size: 16px;
+  }
+  .ticket-info-col .meta {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11.5px;
+    color: #6b6355;
+  }
+
+  /* ---------- client view ---------- */
+  .join-card {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 20px;
+    margin-bottom: 20px;
+  }
+  .join-intro {
+    margin: 0 0 16px;
+    font-size: 12.5px;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+  .geo-status {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12.5px;
+    color: var(--gold);
+    margin: 0 0 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .geo-status.geo-error { color: var(--red-bright); }
+  .geo-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--gold);
+    animation: pulse 1.2s ease-in-out infinite;
+    flex-shrink: 0;
+  }
+  .join-card label {
+    display: block;
+    font-size: 12px;
+    color: var(--muted);
+    margin-bottom: 8px;
+    font-weight: 500;
+  }
+  .join-card input {
+    width: 100%;
+    background: var(--bg);
+    border: 1px solid var(--line);
+    color: var(--paper);
+    padding: 12px 14px;
+    border-radius: 8px;
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 15px;
+    margin-bottom: 14px;
+  }
+  .join-card input:focus { outline: 2px solid var(--gold); outline-offset: 1px; }
+  .btn {
+    width: 100%;
+    border: none;
+    padding: 13px 16px;
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 14px;
+    cursor: pointer;
+    letter-spacing: 0.01em;
+    font-family: 'IBM Plex Sans', sans-serif;
+  }
+  .btn-primary { background: var(--red); color: var(--paper); }
+  .btn-primary:hover { background: var(--red-bright); }
+  .btn-primary:disabled { background: var(--line); color: var(--muted); cursor: not-allowed; }
+  .btn-ghost {
+    background: transparent;
+    color: var(--muted);
+    border: 1px solid var(--line);
+  }
+  .btn-ghost:hover { color: var(--paper); border-color: var(--muted); }
+
+  .status-row {
+    display: flex;
+    gap: 12px;
+    margin: 20px 0;
+  }
+  .status-box {
+    flex: 1;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 16px 14px;
+    text-align: center;
+  }
+  .status-box .big {
+    font-family: 'Anton', sans-serif;
+    font-size: 30px;
+    color: var(--gold);
+    line-height: 1;
+  }
+  .status-box .small {
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  .queue-preview {
+    margin-top: 24px;
+  }
+  .queue-preview h3 {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+    font-weight: 600;
+    margin: 0 0 12px;
+  }
+  .mini-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 0;
+    border-bottom: 1px solid var(--line);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+  }
+  .mini-row:last-child { border-bottom: none; }
+  .mini-num {
+    width: 30px; height: 30px;
+    border-radius: 50%;
+    background: var(--surface-2);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px;
+    color: var(--gold);
+    flex-shrink: 0;
+  }
+  .mini-row.me .mini-num { background: var(--red); color: var(--paper); }
+  .mini-row .mname { flex: 1; color: var(--paper); font-family: 'IBM Plex Sans', sans-serif; }
+  .mini-row .mwait { color: var(--muted); }
+
+  .empty {
+    text-align: center;
+    padding: 30px 10px;
+    color: var(--muted);
+    font-size: 13.5px;
+  }
+
+  /* ---------- salon view ---------- */
+  .salon-header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 4px;
+  }
+  .live-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--gold);
+  }
+  .live-dot {
+    width: 7px; height: 7px; border-radius: 50%;
+    background: var(--red-bright);
+    animation: pulse 1.6s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.35; }
+  }
+
+  .add-walkin {
+    display: flex;
+    gap: 8px;
+    margin: 18px 0 22px;
+  }
+  .add-walkin input {
+    flex: 1;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    color: var(--paper);
+    padding: 11px 13px;
+    border-radius: 8px;
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 14px;
+  }
+  .add-walkin button {
+    background: var(--gold);
+    color: var(--ink);
+    border: none;
+    border-radius: 8px;
+    padding: 0 18px;
+    font-weight: 700;
+    font-size: 20px;
+    cursor: pointer;
+  }
+
+  .queue-list { display: flex; flex-direction: column; gap: 12px; }
+  .qitem {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 14px 14px 14px 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .qitem.first { border-color: var(--gold); }
+  .qnum {
+    font-family: 'Anton', sans-serif;
+    font-size: 22px;
+    color: var(--gold);
+    width: 46px;
+    flex-shrink: 0;
+  }
+  .qname { flex: 1; }
+  .qname .n { font-weight: 700; font-size: 14.5px; }
+  .qname .t { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--muted); margin-top: 2px; }
+  .qactions { display: flex; gap: 6px; }
+  .qactions button {
+    border: none;
+    border-radius: 6px;
+    padding: 8px 10px;
+    font-size: 11.5px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: 'IBM Plex Sans', sans-serif;
+  }
+  .qactions .call { background: var(--red); color: var(--paper); }
+  .qactions .drop { background: transparent; color: var(--muted); border: 1px solid var(--line); }
+  .qactions .drop:hover { color: var(--paper); }
+
+  .footnote {
+    margin-top: 34px;
+    font-size: 11.5px;
+    color: var(--muted);
+    line-height: 1.6;
+    border-top: 1px solid var(--line);
+    padding-top: 16px;
+  }
+  .footnote b { color: var(--paper); }
+
+  .sync-note {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10.5px;
+    color: var(--muted);
+    text-align: center;
+    margin-top: 18px;
+  }
+</style>
+
+<div class="app">
+  <div class="top-banner"></div>
+  <header>
+    <div class="pole"></div>
+    <h1>Actuel&nbsp;Live</h1>
+    <div class="tag">Actuel Coiffure<br>Villeurbanne</div>
+  </header>
+
+  <div class="switcher">
+    <button id="tab-client" class="active">Espace client</button>
+    <button id="tab-salon">Espace salon</button>
+  </div>
+
+  <!-- CLIENT VIEW -->
+  <section id="view-client" class="active">
+    <p class="eyebrow">File en direct</p>
+    <h2 class="section-title">Combien de monde ?</h2>
+
+    <div class="status-row" id="public-status-row">
+      <div class="status-box">
+        <div class="big" id="public-count">—</div>
+        <div class="small">en attente</div>
+      </div>
+      <div class="status-box">
+        <div class="big" id="public-wait">—</div>
+        <div class="small">min avant une place</div>
+      </div>
+    </div>
+
+    <div id="join-card" class="join-card">
+      <p class="join-intro">La prise de ticket n'est possible que depuis l'intérieur du salon, pour éviter les files fantômes. Regarde l'attente ci-dessus depuis chez toi, et lance la vérification une fois sur place.</p>
+
+      <div id="geo-idle">
+        <button id="geo-check-btn" class="btn btn-primary">Je suis dans le salon → vérifier ma position</button>
+      </div>
+
+      <div id="geo-loading" style="display:none;">
+        <p class="geo-status"><span class="geo-dot"></span>Vérification de ta position…</p>
+      </div>
+
+      <div id="geo-fail" style="display:none;">
+        <p class="geo-status geo-error" id="geo-fail-msg"></p>
+        <button id="geo-retry-btn" class="btn btn-ghost">Réessayer</button>
+      </div>
+
+      <div id="name-form" style="display:none;">
+        <label for="client-name">Position confirmée. Ton prénom ?</label>
+        <input id="client-name" type="text" placeholder="Ex: Yanis" maxlength="20" />
+        <button id="join-btn" class="btn btn-primary">Prendre mon ticket</button>
+      </div>
+    </div>
+
+    <div id="my-ticket-wrap" style="display:none;">
+      <div class="ticket">
+        <div class="grain"></div>
+        <div class="perf"></div>
+        <div class="ticket-row">
+          <div class="ticket-num-col">
+            <div class="ticket-num" id="my-num">A1</div>
+            <div class="ticket-label">Ton ticket</div>
+          </div>
+          <div class="ticket-info-col">
+            <div class="name" id="my-name">—</div>
+            <div class="meta" id="my-joined">arrivé à --:--</div>
+          </div>
+        </div>
+        <div class="stamp">
+          <div class="s1">AC</div>
+          <div class="s2">Villeurbanne</div>
+        </div>
+      </div>
+
+      <div class="status-row">
+        <div class="status-box">
+          <div class="big" id="my-position">—</div>
+          <div class="small">devant toi</div>
+        </div>
+        <div class="status-box">
+          <div class="big" id="my-wait">—</div>
+          <div class="small">min estimées</div>
+        </div>
+      </div>
+
+      <button id="leave-btn" class="btn btn-ghost">Quitter la file</button>
+    </div>
+
+    <div class="queue-preview">
+      <h3>File en cours</h3>
+      <div id="client-queue-list"></div>
+    </div>
+  </section>
+
+  <!-- SALON VIEW -->
+  <section id="view-salon">
+    <div class="salon-header-row">
+      <div>
+        <p class="eyebrow">Vue salon</p>
+        <h2 class="section-title" style="margin-bottom:0;">La file</h2>
+      </div>
+      <span class="live-badge"><span class="live-dot"></span>en direct</span>
+    </div>
+
+    <div class="add-walkin">
+      <input id="walkin-name" type="text" placeholder="Ajouter un client sans appli (prénom)" maxlength="20" />
+      <button id="walkin-btn" aria-label="Ajouter">+</button>
+    </div>
+
+    <div id="salon-queue-list" class="queue-list"></div>
+
+    <div class="footnote">
+      <b>Prototype de démo.</b> Les données sont stockées et synchronisées en temps réel (toutes les 3 secondes) — utile pour tester en ouvrant cet artefact sur deux écrans, un côté client et un côté salon. Aucun vrai QR code scannable ici, c'est un espace réservé pour le moment.
+    </div>
+    <div class="sync-note">bouton "Réinitialiser la démo" en bas de l'espace client</div>
+  </section>
+</div>
+
+<script>
+(function () {
+  const API_URL = "https://script.google.com/macros/s/AKfycbwe0pb4FQeNw1mUBveL-rFI0OUTsXhC4yYg5mTQ0TCZa0ctZpQO-OY03sCwWs4FdAFK/exec";
+
+  // Position du salon (162 Cours Tolstoï, 69100 Villeurbanne)
+  const SALON_LAT = 45.760194;
+  const SALON_LNG = 4.8872729;
+  const RADIUS_METERS = 100; // rue résidentielle, rayon resserré pour éviter de couvrir les commerces voisins
+
+  let state = { tickets: [], nextNum: 1 };
+  let myTicketId = null;
+  let pollTimer = null;
+
+  function distanceMeters(lat1, lon1, lat2, lon2) {
+    const R = 6371000; // rayon terrestre en mètres
+    const toRad = (d) => (d * Math.PI) / 180;
+    const dLat = toRad(lat2 - lat1);
+    const dLon = toRad(lon2 - lon1);
+    const a =
+      Math.sin(dLat / 2) ** 2 +
+      Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(dLon / 2) ** 2;
+    return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  }
+
+  function checkPositionAndReveal() {
+    el("geo-idle").style.display = "none";
+    el("geo-fail").style.display = "none";
+    el("name-form").style.display = "none";
+    el("geo-loading").style.display = "block";
+
+    if (!navigator.geolocation) {
+      showGeoFail("Ton navigateur ne supporte pas la géolocalisation. Demande au salon de te confirmer manuellement ta place.");
+      return;
+    }
+
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        const dist = distanceMeters(
+          pos.coords.latitude,
+          pos.coords.longitude,
+          SALON_LAT,
+          SALON_LNG
+        );
+        if (dist <= RADIUS_METERS) {
+          el("geo-loading").style.display = "none";
+          el("name-form").style.display = "block";
+          el("client-name").focus();
+        } else {
+          showGeoFail("Tu es à environ " + Math.round(dist) + " m du salon, c'est trop loin pour prendre un ticket depuis ici.");
+        }
+      },
+      (err) => {
+        let msg = "Impossible de vérifier ta position.";
+        if (err.code === err.PERMISSION_DENIED) {
+          msg = "Localisation refusée. Elle est nécessaire pour prendre un ticket depuis le salon.";
+        } else if (err.code === err.TIMEOUT) {
+          msg = "La vérification a pris trop de temps, réessaie.";
+        }
+        showGeoFail(msg);
+      },
+      { enableHighAccuracy: true, timeout: 8000 }
+    );
+  }
+
+  function showGeoFail(message) {
+    el("geo-loading").style.display = "none";
+    el("geo-fail-msg").textContent = message;
+    el("geo-fail").style.display = "block";
+  }
+
+  const el = (id) => document.getElementById(id);
+
+  // ---------- backend (Google Apps Script, gratuit) ----------
+  async function loadState() {
+    try {
+      const res = await fetch(API_URL, { method: "GET" });
+      const data = await res.json();
+      state.tickets = (data.tickets || []).sort((a, b) => a.num - b.num);
+    } catch (e) {
+      console.error("Erreur de chargement de la file", e);
+    }
+    render();
+  }
+
+  async function postAction(payload) {
+    // Content-Type text/plain évite le préflight CORS qu'Apps Script ne gère pas.
+    const res = await fetch(API_URL, {
+      method: "POST",
+      headers: { "Content-Type": "text/plain;charset=utf-8" },
+      body: JSON.stringify(payload),
+    });
+    return res.json();
+  }
+
+  function ticketLabel(num) {
+    // A1, A2 ... A26, B1 ...
+    const letter = String.fromCharCode(65 + Math.floor((num - 1) / 26));
+    const n = ((num - 1) % 26) + 1;
+    return letter + n;
+  }
+
+  function timeStr(ts) {
+    const d = new Date(ts);
+    return d.getHours().toString().padStart(2, "0") + ":" + d.getMinutes().toString().padStart(2, "0");
+  }
+
+  function minutesSince(ts) {
+    return Math.max(0, Math.round((Date.now() - new Date(ts).getTime()) / 60000));
+  }
+
+  // ---------- actions ----------
+  async function joinQueue(name) {
+    try {
+      const ticket = await postAction({ action: "join", name: name });
+      myTicketId = ticket.id;
+      await loadState();
+    } catch (e) {
+      console.error("Erreur en rejoignant la file", e);
+    }
+  }
+
+  async function leaveQueue(id) {
+    try {
+      await postAction({ action: "leave", id: id });
+      if (id === myTicketId) myTicketId = null;
+      await loadState();
+    } catch (e) {
+      console.error("Erreur en quittant la file", e);
+    }
+  }
+
+  async function callNext() {
+    try {
+      await postAction({ action: "callNext" });
+      await loadState();
+    } catch (e) {
+      console.error("Erreur en appelant le suivant", e);
+    }
+  }
+
+  // ---------- render ----------
+  function render() {
+    renderClient();
+    renderSalon();
+  }
+
+  function renderClient() {
+    const myIndex = state.tickets.findIndex(t => t.id === myTicketId);
+    const joinCard = el("join-card");
+    const ticketWrap = el("my-ticket-wrap");
+    const publicRow = el("public-status-row");
+
+    // compteur public, visible même sans ticket (consultation à distance)
+    el("public-count").textContent = state.tickets.length;
+    el("public-wait").textContent = state.tickets.length * 30;
+
+    if (myIndex >= 0) {
+      joinCard.style.display = "none";
+      publicRow.style.display = "none";
+      ticketWrap.style.display = "block";
+      const t = state.tickets[myIndex];
+      el("my-num").textContent = ticketLabel(t.num);
+      el("my-name").textContent = t.name;
+      el("my-joined").textContent = "arrivé à " + timeStr(t.joinedAt);
+      el("my-position").textContent = myIndex;
+      el("my-wait").textContent = myIndex * 30; // ~30 min par personne, estimation à ajuster selon les prestations réelles
+    } else {
+      joinCard.style.display = "block";
+      publicRow.style.display = "flex";
+      ticketWrap.style.display = "none";
+    }
+
+    const listWrap = el("client-queue-list");
+    if (state.tickets.length === 0) {
+      listWrap.innerHTML = '<div class="empty">Personne dans la file pour le moment.<br>Sois le premier !</div>';
+    } else {
+      listWrap.innerHTML = state.tickets.map((t, i) => `
+        <div class="mini-row ${t.id === myTicketId ? 'me' : ''}">
+          <div class="mini-num">${ticketLabel(t.num)}</div>
+          <div class="mname">${t.name}</div>
+          <div class="mwait">${i === 0 ? 'en cours' : '~' + (i * 30) + ' min'}</div>
+        </div>
+      `).join("");
+    }
+  }
+
+  function renderSalon() {
+    const wrap = el("salon-queue-list");
+    if (state.tickets.length === 0) {
+      wrap.innerHTML = '<div class="empty">File vide. Ajoute un client walk-in ci-dessus, ou attends qu\'un client rejoigne depuis l\'espace client.</div>';
+      return;
+    }
+    wrap.innerHTML = state.tickets.map((t, i) => `
+      <div class="qitem ${i === 0 ? 'first' : ''}">
+        <div class="qnum">${ticketLabel(t.num)}</div>
+        <div class="qname">
+          <div class="n">${t.name}${i === 0 ? ' — en cours' : ''}</div>
+          <div class="t">arrivé à ${timeStr(t.joinedAt)} · attend depuis ${minutesSince(t.joinedAt)} min</div>
+        </div>
+        <div class="qactions">
+          ${i === 0 ? `<button class="call" data-call="${t.id}">Suivant</button>` : ''}
+          <button class="drop" data-drop="${t.id}">Retirer</button>
+        </div>
+      </div>
+    `).join("");
+  }
+
+  // ---------- events ----------
+  el("tab-client").addEventListener("click", () => {
+    el("tab-client").classList.add("active");
+    el("tab-salon").classList.remove("active");
+    el("view-client").classList.add("active");
+    el("view-salon").classList.remove("active");
+  });
+  el("tab-salon").addEventListener("click", () => {
+    el("tab-salon").classList.add("active");
+    el("tab-client").classList.remove("active");
+    el("view-salon").classList.add("active");
+    el("view-client").classList.remove("active");
+  });
+
+  function resetGeoFlow() {
+    el("geo-idle").style.display = "block";
+    el("geo-loading").style.display = "none";
+    el("geo-fail").style.display = "none";
+    el("name-form").style.display = "none";
+  }
+
+  el("geo-check-btn").addEventListener("click", checkPositionAndReveal);
+  el("geo-retry-btn").addEventListener("click", checkPositionAndReveal);
+
+  el("join-btn").addEventListener("click", () => {
+    const input = el("client-name");
+    const name = input.value.trim();
+    if (!name) { input.focus(); return; }
+    joinQueue(name);
+    input.value = "";
+    resetGeoFlow();
+  });
+  el("client-name").addEventListener("keydown", (e) => {
+    if (e.key === "Enter") el("join-btn").click();
+  });
+
+  el("leave-btn").addEventListener("click", () => {
+    if (myTicketId) {
+      leaveQueue(myTicketId);
+      resetGeoFlow();
+    }
+  });
+
+  el("walkin-btn").addEventListener("click", () => {
+    const input = el("walkin-name");
+    const name = input.value.trim();
+    if (!name) { input.focus(); return; }
+    joinQueue(name);
+    input.value = "";
+  });
+  el("walkin-name").addEventListener("keydown", (e) => {
+    if (e.key === "Enter") el("walkin-btn").click();
+  });
+
+  el("salon-queue-list").addEventListener("click", (e) => {
+    const callId = e.target.getAttribute("data-call");
+    const dropId = e.target.getAttribute("data-drop");
+    if (callId) callNext();
+    else if (dropId) leaveQueue(dropId);
+  });
+
+  // ---------- init + polling ----------
+  loadState();
+  pollTimer = setInterval(loadState, 3000);
+})();
+</script>
