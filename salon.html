@@ -3,223 +3,137 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>File Live — Actuel Coiffure</title>
+<title>Espace salon — Actuel Coiffure</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Anton&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   :root {
-    --ink: #2A2620; --paper: #F3ECDC; --paper-shadow: #DCD2B8;
-    --bg: #171512; --surface: #211E1A; --surface-2: #2A2620;
-    --red: #B23A2E; --red-bright: #C94A3C; --blue: #3A5A6E;
-    --gold: #C69B4E; --muted: #A69E8E; --line: #3A362F;
+    --ink: #2A2620; --paper: #F3ECDC; --bg: #171512; --surface: #211E1A; --surface-2: #2A2620;
+    --red: #B23A2E; --red-bright: #C94A3C; --blue: #3A5A6E; --gold: #C69B4E; --muted: #A69E8E; --line: #3A362F;
   }
   * { box-sizing: border-box; }
   body {
     font-size: 17px;
     margin: 0;
     background: radial-gradient(ellipse 900px 600px at 50% -10%, rgba(178,58,46,0.10), transparent 60%), var(--bg);
-    color: var(--paper);
-    font-family: 'IBM Plex Sans', sans-serif;
-    -webkit-font-smoothing: antialiased;
-    min-height: 100vh;
+    color: var(--paper); font-family: 'IBM Plex Sans', sans-serif; -webkit-font-smoothing: antialiased; min-height: 100vh;
   }
-  .app { max-width: 480px; margin: 0 auto; padding: 24px 20px 60px; position: relative; }
-  .top-banner {
-    height: 5px;
-    background: repeating-linear-gradient(-45deg, var(--red) 0 14px, var(--paper) 14px 28px, var(--blue) 28px 42px);
-    margin: -24px -20px 24px;
-  }
-  .pole {
-    width: 20px; height: 20px; border-radius: 50%;
-    background: repeating-linear-gradient(45deg, var(--red) 0 6px, var(--paper) 6px 12px, var(--blue) 12px 18px);
-    background-size: 100% 300%; animation: spin-stripes 1.8s linear infinite; flex-shrink: 0;
-    box-shadow: inset 0 0 0 1.5px rgba(0,0,0,0.4);
-  }
-  @keyframes spin-stripes { from { background-position: 0 0; } to { background-position: 0 100%; } }
-  @media (prefers-reduced-motion: reduce) { .pole { animation: none; } }
+  .app { max-width: 560px; margin: 0 auto; padding: 24px 20px 60px; }
+  .top-banner { height: 5px; background: repeating-linear-gradient(-45deg, var(--red) 0 14px, var(--paper) 14px 28px, var(--blue) 28px 42px); margin: -24px -20px 24px; }
   header { display: flex; align-items: center; gap: 10px; margin-bottom: 22px; }
-  header h1 { font-family: 'Anton', sans-serif; font-weight: 400; font-size: 25px; letter-spacing: 0.02em; margin: 0; text-transform: uppercase; }
+  header h1 { font-family: 'Anton', sans-serif; font-weight: 400; font-size: 23px; letter-spacing: 0.02em; margin: 0; text-transform: uppercase; }
   header .tag { font-family: 'IBM Plex Mono', monospace; font-size: 12.5px; color: var(--muted); margin-left: auto; text-align: right; line-height: 1.3; }
-  .eyebrow { font-family: 'IBM Plex Mono', monospace; font-size: 12.5px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--gold); margin: 0 0 6px; }
-  .section-title { font-family: 'Anton', sans-serif; font-weight: 400; font-size: 30px; margin: 0 0 20px; text-transform: uppercase; line-height: 1.1; }
-  .back-link {
-    display: inline-flex; align-items: center; gap: 6px; background: none; border: none;
-    color: var(--muted); font-family: 'IBM Plex Sans', sans-serif; font-size: 13px; font-weight: 600;
-    cursor: pointer; padding: 0; margin-bottom: 18px;
-  }
-  .back-link:hover { color: var(--paper); }
 
-  /* ---------- picker ---------- */
-  .coiffeur-card {
-    display: flex; align-items: center; gap: 14px;
-    background: var(--surface); border: 1px solid var(--line); border-radius: 14px;
-    padding: 16px 18px; margin-bottom: 12px; cursor: pointer; text-align: left; width: 100%;
-    font-family: 'IBM Plex Sans', sans-serif; color: var(--paper);
+  /* ---------- PIN gate ---------- */
+  #pin-gate { max-width: 320px; margin: 80px auto 0; text-align: center; }
+  #pin-gate h2 { font-family: 'Anton', sans-serif; font-size: 22px; text-transform: uppercase; margin: 0 0 20px; }
+  #pin-gate input {
+    width: 100%; text-align: center; letter-spacing: 0.4em; font-size: 22px;
+    background: var(--surface); border: 1px solid var(--line); color: var(--paper);
+    padding: 14px; border-radius: 10px; font-family: 'IBM Plex Mono', monospace; margin-bottom: 14px;
   }
-  .coiffeur-card:hover { border-color: var(--gold); }
-  .coiffeur-avatar {
-    width: 44px; height: 44px; border-radius: 50%; background: var(--surface-2);
-    display: flex; align-items: center; justify-content: center;
-    font-family: 'Anton', sans-serif; font-size: 16px; color: var(--gold); flex-shrink: 0;
-  }
-  .coiffeur-info { flex: 1; }
-  .coiffeur-info .cname { font-weight: 700; font-size: 18px; }
-  .coiffeur-info .cwait { font-family: 'IBM Plex Mono', monospace; font-size: 13px; color: var(--muted); margin-top: 3px; }
-  .coiffeur-count {
-    font-family: 'Anton', sans-serif; font-size: 26px; color: var(--gold); text-align: center; min-width: 30px;
-  }
+  #pin-gate input:focus { outline: 2px solid var(--gold); }
+  #pin-error { color: var(--red-bright); font-size: 12.5px; margin-bottom: 12px; min-height: 16px; }
 
-  /* ---------- ticket ---------- */
-  .ticket { background: var(--paper); color: var(--ink); border-radius: 10px; position: relative; padding: 22px 22px 20px; box-shadow: 0 14px 30px -14px rgba(0,0,0,0.6); overflow: hidden; }
-  .ticket .grain { position: absolute; inset: 0; pointer-events: none; opacity: 0.05; mix-blend-mode: multiply;
-    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg"><filter id="n"><feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" stitchTiles="stitch"/><feColorMatrix type="saturate" values="0"/></filter><rect width="100%" height="100%" filter="url(%23n)"/></svg>'); }
-  .ticket::before, .ticket::after { content: ""; position: absolute; width: 22px; height: 22px; background: var(--bg); border-radius: 50%; top: 50%; transform: translateY(-50%); }
-  .ticket::before { left: -11px; } .ticket::after { right: -11px; }
-  .ticket .perf { position: absolute; top: 0; bottom: 0; left: 78px; border-left: 2px dashed var(--paper-shadow); }
-  .ticket-row { display: flex; align-items: stretch; }
-  .ticket-num-col { width: 78px; padding-right: 16px; display: flex; flex-direction: column; justify-content: center; }
-  .ticket-num { font-family: 'Anton', sans-serif; font-size: 46px; line-height: 0.9; }
-  .ticket-label { font-family: 'IBM Plex Mono', monospace; font-size: 9px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--red); margin-top: 4px; }
-  .ticket-info-col { flex: 1; padding-left: 20px; display: flex; flex-direction: column; justify-content: center; gap: 4px; }
-  .ticket-info-col .name { font-weight: 700; font-size: 19px; }
-  .ticket-info-col .meta { font-family: 'IBM Plex Mono', monospace; font-size: 13px; color: #6b6355; }
-  .stamp { position: absolute; bottom: 12px; right: -6px; width: 74px; height: 74px; border: 1.5px solid var(--red); border-radius: 50%; color: var(--red);
-    display: flex; align-items: center; justify-content: center; flex-direction: column; transform: rotate(-11deg); opacity: 0.55; mix-blend-mode: multiply; }
-  .stamp .s1 { font-family: 'Anton', sans-serif; font-size: 15px; letter-spacing: 0.04em; line-height: 1; }
-  .stamp .s2 { font-family: 'IBM Plex Mono', monospace; font-size: 6.5px; letter-spacing: 0.06em; margin-top: 3px; text-transform: uppercase; }
-
-  /* ---------- forms / buttons ---------- */
-  .join-card { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 20px; margin-bottom: 20px; }
-  .join-intro { margin: 0 0 16px; font-size: 12.5px; color: var(--muted); line-height: 1.6; }
-  .geo-status { font-family: 'IBM Plex Mono', monospace; font-size: 12.5px; color: var(--gold); margin: 0 0 14px; display: flex; align-items: center; gap: 8px; }
-  .geo-status.geo-error { color: var(--red-bright); }
-  .geo-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--gold); animation: pulse 1.2s ease-in-out infinite; flex-shrink: 0; }
-  @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.35; } }
-  .join-card label { display: block; font-size: 12px; color: var(--muted); margin-bottom: 8px; font-weight: 500; }
-  .join-card input { width: 100%; background: var(--bg); border: 1px solid var(--line); color: var(--paper); padding: 14px 14px; border-radius: 8px; font-family: 'IBM Plex Sans', sans-serif; font-size: 17px; margin-bottom: 14px; }
-  .join-card input:focus { outline: 2px solid var(--gold); outline-offset: 1px; }
-  .btn { width: 100%; border: none; padding: 15px 16px; border-radius: 8px; font-weight: 700; font-size: 16px; cursor: pointer; letter-spacing: 0.01em; font-family: 'IBM Plex Sans', sans-serif; }
+  .btn { width: 100%; border: none; padding: 13px 16px; border-radius: 8px; font-weight: 700; font-size: 14px; cursor: pointer; font-family: 'IBM Plex Sans', sans-serif; }
   .btn-primary { background: var(--red); color: var(--paper); }
   .btn-primary:hover { background: var(--red-bright); }
-  .btn-ghost { background: transparent; color: var(--muted); border: 1px solid var(--line); }
-  .btn-ghost:hover { color: var(--paper); border-color: var(--muted); }
 
-  .status-row { display: flex; gap: 12px; margin: 20px 0; }
-  .status-box { flex: 1; background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 16px 14px; text-align: center; }
-  .status-box .big { font-family: 'Anton', sans-serif; font-size: 34px; color: var(--gold); line-height: 1; }
-  .status-box .small { font-size: 12.5px; color: var(--muted); margin-top: 6px; text-transform: uppercase; letter-spacing: 0.06em; }
+  /* ---------- tabs ---------- */
+  .coiffeur-tabs { display: flex; gap: 6px; background: var(--surface); border-radius: 999px; padding: 4px; margin-bottom: 24px; border: 1px solid var(--line); }
+  .coiffeur-tabs button { flex: 1; border: none; background: transparent; color: var(--muted); font-weight: 600; font-size: 14.5px; padding: 10px 6px; border-radius: 999px; cursor: pointer; font-family: 'IBM Plex Sans', sans-serif; }
+  .coiffeur-tabs button.active { background: var(--paper); color: var(--ink); }
 
-  .queue-preview { margin-top: 24px; }
-  .queue-preview h3 { font-size: 12px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); font-weight: 600; margin: 0 0 12px; }
-  .mini-row { display: flex; align-items: center; gap: 10px; padding: 11px 0; border-bottom: 1px solid var(--line); font-family: 'IBM Plex Mono', monospace; font-size: 15px; }
-  .mini-row:last-child { border-bottom: none; }
-  .mini-num { width: 30px; height: 30px; border-radius: 50%; background: var(--surface-2); display: flex; align-items: center; justify-content: center; font-size: 11px; color: var(--gold); flex-shrink: 0; }
-  .mini-row.me .mini-num { background: var(--red); color: var(--paper); }
-  .mini-row .mname { flex: 1; color: var(--paper); font-family: 'IBM Plex Sans', sans-serif; }
-  .mini-row .mwait { color: var(--muted); }
-  .empty { text-align: center; padding: 30px 10px; color: var(--muted); font-size: 13.5px; }
+  .live-badge { display: inline-flex; align-items: center; gap: 6px; font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--gold); float: right; margin-top: 6px; }
+  .live-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--red-bright); animation: pulse 1.6s ease-in-out infinite; }
+  @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.35; } }
+
+  .section-title { font-family: 'Anton', sans-serif; font-weight: 400; font-size: 28px; margin: 0 0 16px; text-transform: uppercase; }
+
+  /* ---------- current client card ---------- */
+  .current-card { background: var(--paper); color: var(--ink); border-radius: 14px; padding: 18px 20px; margin-bottom: 22px; }
+  .current-card .label { font-family: 'IBM Plex Mono', monospace; font-size: 10px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--red); margin-bottom: 6px; }
+  .current-card .cname { font-family: 'Anton', sans-serif; font-size: 30px; margin-bottom: 4px; }
+  .current-card .cmeta { font-family: 'IBM Plex Mono', monospace; font-size: 13.5px; color: #6b6355; margin-bottom: 14px; }
+  .current-card button { width: 100%; border: none; background: var(--red); color: var(--paper); font-weight: 700; padding: 14px; border-radius: 8px; cursor: pointer; font-family: 'IBM Plex Sans', sans-serif; font-size: 15.5px; }
+  .empty-chair { background: var(--surface); border: 1px dashed var(--line); border-radius: 14px; padding: 20px; text-align: center; margin-bottom: 22px; color: var(--muted); font-size: 15px; }
+  .empty-chair button { margin-top: 12px; width: 100%; border: none; background: var(--gold); color: var(--ink); font-weight: 700; padding: 12px; border-radius: 8px; cursor: pointer; font-family: 'IBM Plex Sans', sans-serif; }
+
+  .add-walkin { display: flex; gap: 8px; margin: 0 0 22px; }
+  .add-walkin input { flex: 1; background: var(--surface); border: 1px solid var(--line); color: var(--paper); padding: 13px 13px; border-radius: 8px; font-family: 'IBM Plex Sans', sans-serif; font-size: 16px; }
+  .add-walkin button { background: var(--gold); color: var(--ink); border: none; border-radius: 8px; padding: 0 18px; font-weight: 700; font-size: 20px; cursor: pointer; }
+
+  .queue-list { display: flex; flex-direction: column; gap: 12px; }
+  .qitem { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 14px 14px 14px 16px; display: flex; align-items: center; gap: 12px; }
+  .qnum { font-family: 'Anton', sans-serif; font-size: 25px; color: var(--gold); width: 40px; flex-shrink: 0; }
+  .qname { flex: 1; }
+  .qname .n { font-weight: 700; font-size: 16.5px; }
+  .qname .t { font-family: 'IBM Plex Mono', monospace; font-size: 12.5px; color: var(--muted); margin-top: 2px; }
+  .qactions button { border: none; border-radius: 6px; padding: 8px 10px; font-size: 11.5px; font-weight: 600; cursor: pointer; font-family: 'IBM Plex Sans', sans-serif; background: transparent; color: var(--muted); border: 1px solid var(--line); }
+  .qactions button:hover { color: var(--paper); }
+  .empty { text-align: center; padding: 20px 10px; color: var(--muted); font-size: 13.5px; }
 </style>
 </head>
 <body>
 
-<div class="app">
+<div id="pin-gate">
+  <h2>Accès salon</h2>
+  <input id="pin-input" type="password" inputmode="numeric" maxlength="4" placeholder="••••" />
+  <div id="pin-error"></div>
+  <button class="btn btn-primary" id="pin-submit">Entrer</button>
+</div>
+
+<div class="app" id="app-wrap" style="display:none;">
   <div class="top-banner"></div>
   <header>
-    <div class="pole"></div>
-    <h1>File&nbsp;Live</h1>
+    <h1>Espace salon</h1>
     <div class="tag">Actuel Coiffure<br>Villeurbanne</div>
   </header>
 
-  <!-- ÉCRAN 1 : choix du coiffeur -->
-  <div id="view-picker">
-    <p class="eyebrow">File en direct</p>
-    <h2 class="section-title">Choisis ton coiffeur</h2>
-    <div id="picker-list"></div>
+  <div class="coiffeur-tabs" id="coiffeur-tabs"></div>
+  <span class="live-badge"><span class="live-dot"></span>en direct</span>
+  <h2 class="section-title" id="active-coiffeur-title">—</h2>
+
+  <div id="current-slot"></div>
+
+  <div class="add-walkin">
+    <input id="walkin-name" type="text" placeholder="Ajouter un client sans appli (prénom)" maxlength="20" />
+    <button id="walkin-btn" aria-label="Ajouter">+</button>
   </div>
 
-  <!-- ÉCRAN 2 : file du coiffeur choisi -->
-  <div id="view-queue" style="display:none;">
-    <button class="back-link" id="back-btn">&larr; Changer de coiffeur</button>
-    <p class="eyebrow">File en direct</p>
-    <h2 class="section-title" id="queue-title">Combien de monde ?</h2>
-
-    <div class="status-row" id="public-status-row">
-      <div class="status-box">
-        <div class="big" id="public-count">—</div>
-        <div class="small">en attente</div>
-      </div>
-      <div class="status-box">
-        <div class="big" id="public-wait">—</div>
-        <div class="small">min avant une place</div>
-      </div>
-    </div>
-
-    <div id="join-card" class="join-card">
-      <p class="join-intro">La prise de ticket n'est possible que depuis l'intérieur du salon, pour éviter les files fantômes. Regarde l'attente ci-dessus depuis chez toi, et lance la vérification une fois sur place.</p>
-      <div id="geo-idle"><button id="geo-check-btn" class="btn btn-primary">Je suis dans le salon → vérifier ma position</button></div>
-      <div id="geo-loading" style="display:none;"><p class="geo-status"><span class="geo-dot"></span>Vérification de ta position…</p></div>
-      <div id="geo-fail" style="display:none;"><p class="geo-status geo-error" id="geo-fail-msg"></p><button id="geo-retry-btn" class="btn btn-ghost">Réessayer</button></div>
-      <div id="name-form" style="display:none;">
-        <label for="client-name">Position confirmée. Ton prénom ?</label>
-        <input id="client-name" type="text" placeholder="Ex: Yanis" maxlength="20" />
-        <button id="join-btn" class="btn btn-primary">Prendre mon ticket</button>
-      </div>
-    </div>
-
-    <div id="my-ticket-wrap" style="display:none;">
-      <div class="ticket">
-        <div class="grain"></div>
-        <div class="perf"></div>
-        <div class="ticket-row">
-          <div class="ticket-num-col">
-            <div class="ticket-num" id="my-num">A1</div>
-            <div class="ticket-label">Ton ticket</div>
-          </div>
-          <div class="ticket-info-col">
-            <div class="name" id="my-name">—</div>
-            <div class="meta" id="my-joined">arrivé à --:--</div>
-          </div>
-        </div>
-        <div class="stamp"><div class="s1">AC</div><div class="s2">Villeurbanne</div></div>
-      </div>
-      <div class="status-row">
-        <div class="status-box"><div class="big" id="my-position">—</div><div class="small">devant toi</div></div>
-        <div class="status-box"><div class="big" id="my-wait">—</div><div class="small">min estimées</div></div>
-      </div>
-      <button id="leave-btn" class="btn btn-ghost">Quitter la file</button>
-    </div>
-
-    <div class="queue-preview">
-      <h3>File en cours</h3>
-      <div id="client-queue-list"></div>
-    </div>
-  </div>
+  <div id="salon-queue-list" class="queue-list"></div>
 </div>
 
 <script>
 (function () {
   const API_URL = "https://script.google.com/macros/s/AKfycbwe0pb4FQeNw1mUBveL-rFI0OUTsXhC4yYg5mTQ0TCZa0ctZpQO-OY03sCwWs4FdAFK/exec";
   const COIFFEURS = ["Ahmed", "Moula", "Coiffeur 3"];
-
-  // Position du salon (162 Cours Tolstoï, 69100 Villeurbanne)
-  const SALON_LAT = 45.760194;
-  const SALON_LNG = 4.8872729;
-  const RADIUS_METERS = 100;
+  const SALON_PIN = "1234"; // à changer librement, une seule ligne
 
   let allTickets = [];
-  let selectedCoiffeur = null;
-  let myTicketId = null;
+  let activeCoiffeur = COIFFEURS[0];
 
   const el = (id) => document.getElementById(id);
 
-  function distanceMeters(lat1, lon1, lat2, lon2) {
-    const R = 6371000;
-    const toRad = (d) => (d * Math.PI) / 180;
-    const dLat = toRad(lat2 - lat1);
-    const dLon = toRad(lon2 - lon1);
-    const a = Math.sin(dLat / 2) ** 2 + Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(dLon / 2) ** 2;
-    return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  // ---------- PIN gate ----------
+  function tryUnlock() {
+    if (el("pin-input").value === SALON_PIN) {
+      sessionStorage.setItem("salon-unlocked", "1");
+      el("pin-gate").style.display = "none";
+      el("app-wrap").style.display = "block";
+      init();
+    } else {
+      el("pin-error").textContent = "Code incorrect.";
+    }
+  }
+  el("pin-submit").addEventListener("click", tryUnlock);
+  el("pin-input").addEventListener("keydown", (e) => { if (e.key === "Enter") tryUnlock(); });
+
+  if (sessionStorage.getItem("salon-unlocked") === "1") {
+    el("pin-gate").style.display = "none";
+    el("app-wrap").style.display = "block";
+    init();
   }
 
   function ticketLabel(num) {
@@ -231,17 +145,18 @@
     const d = new Date(ts);
     return d.getHours().toString().padStart(2, "0") + ":" + d.getMinutes().toString().padStart(2, "0");
   }
+  function minutesSince(ts) {
+    return Math.max(0, Math.round((Date.now() - new Date(ts).getTime()) / 60000));
+  }
 
-  // ---------- backend ----------
   async function loadState() {
     try {
       const res = await fetch(API_URL, { method: "GET" });
       const data = await res.json();
       allTickets = (data.tickets || []).sort((a, b) => a.num - b.num);
-    } catch (e) { console.error("Erreur de chargement", e); }
+    } catch (e) { console.error(e); }
     render();
   }
-
   async function postAction(payload) {
     const res = await fetch(API_URL, {
       method: "POST",
@@ -251,172 +166,87 @@
     return res.json();
   }
 
-  function ticketsFor(coiffeur) {
-    return allTickets.filter(t => t.coiffeur === coiffeur);
-  }
-
-  // ---------- picker ----------
-  function renderPicker() {
-    const wrap = el("picker-list");
-    wrap.innerHTML = COIFFEURS.map(name => {
-      const all = ticketsFor(name);
-      const list = all.filter(t => t.status === "waiting");
-      const current = all.find(t => t.status === "called");
-      const estWait = ((current ? 1 : 0) + list.length) * 30;
-      const initials = name.split(" ").map(w => w[0]).join("").slice(0,2).toUpperCase();
-      return `
-        <button class="coiffeur-card" data-coiffeur="${name}">
-          <div class="coiffeur-avatar">${initials}</div>
-          <div class="coiffeur-info">
-            <div class="cname">${name}</div>
-            <div class="cwait">${estWait} min d'attente estimée</div>
-          </div>
-          <div class="coiffeur-count">${list.length}</div>
-        </button>
-      `;
-    }).join("");
-    wrap.querySelectorAll(".coiffeur-card").forEach(btn => {
-      btn.addEventListener("click", () => selectCoiffeur(btn.getAttribute("data-coiffeur")));
+  function init() {
+    const tabsWrap = el("coiffeur-tabs");
+    tabsWrap.innerHTML = COIFFEURS.map(name => `<button data-name="${name}">${name}</button>`).join("");
+    tabsWrap.querySelectorAll("button").forEach(btn => {
+      btn.addEventListener("click", () => { activeCoiffeur = btn.getAttribute("data-name"); render(); });
     });
+
+    el("walkin-btn").addEventListener("click", () => {
+      const input = el("walkin-name");
+      const name = input.value.trim();
+      if (!name) { input.focus(); return; }
+      postAction({ action: "join", name: name, coiffeur: activeCoiffeur }).then(loadState);
+      input.value = "";
+    });
+    el("walkin-name").addEventListener("keydown", (e) => { if (e.key === "Enter") el("walkin-btn").click(); });
+
+    loadState();
+    setInterval(loadState, 3000);
   }
 
-  function selectCoiffeur(name) {
-    selectedCoiffeur = name;
-    myTicketId = null;
-    resetGeoFlow();
-    el("view-picker").style.display = "none";
-    el("view-queue").style.display = "block";
-    el("queue-title").textContent = name;
-    render();
-  }
+  function render() {
+    const tabsWrap = el("coiffeur-tabs");
+    tabsWrap.querySelectorAll("button").forEach(btn => {
+      btn.classList.toggle("active", btn.getAttribute("data-name") === activeCoiffeur);
+    });
+    el("active-coiffeur-title").textContent = activeCoiffeur;
 
-  el("back-btn").addEventListener("click", () => {
-    selectedCoiffeur = null;
-    el("view-queue").style.display = "none";
-    el("view-picker").style.display = "block";
-    render();
-  });
+    const list = allTickets.filter(t => t.coiffeur === activeCoiffeur);
+    const current = list.find(t => t.status === "called");
+    const waiting = list.filter(t => t.status === "waiting");
 
-  // ---------- geolocation ----------
-  function checkPositionAndReveal() {
-    el("geo-idle").style.display = "none";
-    el("geo-fail").style.display = "none";
-    el("name-form").style.display = "none";
-    el("geo-loading").style.display = "block";
-    if (!navigator.geolocation) {
-      showGeoFail("Ton navigateur ne supporte pas la géolocalisation.");
+    // slot "en cours"
+    const slot = el("current-slot");
+    if (current) {
+      slot.innerHTML = `
+        <div class="current-card">
+          <div class="label">En cours de coupe</div>
+          <div class="cname">${current.name}</div>
+          <div class="cmeta">démarré à ${timeStr(current.calledAt)} · depuis ${minutesSince(current.calledAt)} min</div>
+          <button data-finish="${current.id}">Terminer la coupe</button>
+        </div>`;
+      slot.querySelector("[data-finish]").addEventListener("click", async () => {
+        await postAction({ action: "finish", id: current.id });
+        await postAction({ action: "callNext", coiffeur: activeCoiffeur }); // enchaîne direct sur le suivant s'il y en a un
+        loadState();
+      });
+    } else if (waiting.length > 0) {
+      slot.innerHTML = `
+        <div class="empty-chair">
+          Personne en cours pour ${activeCoiffeur}.
+          <button data-next="1">Appeler le suivant (${waiting[0].name})</button>
+        </div>`;
+      slot.querySelector("[data-next]").addEventListener("click", () => {
+        postAction({ action: "callNext", coiffeur: activeCoiffeur }).then(loadState);
+      });
+    } else {
+      slot.innerHTML = `<div class="empty-chair">Personne en cours, file vide pour ${activeCoiffeur}.</div>`;
+    }
+
+    // liste d'attente
+    const wrap = el("salon-queue-list");
+    if (waiting.length === 0) {
+      wrap.innerHTML = '<div class="empty">Aucun client en attente pour ce coiffeur.</div>';
       return;
     }
-    navigator.geolocation.getCurrentPosition(
-      (pos) => {
-        const dist = distanceMeters(pos.coords.latitude, pos.coords.longitude, SALON_LAT, SALON_LNG);
-        if (dist <= RADIUS_METERS) {
-          el("geo-loading").style.display = "none";
-          el("name-form").style.display = "block";
-          el("client-name").focus();
-        } else {
-          showGeoFail("Tu es à environ " + Math.round(dist) + " m du salon, c'est trop loin pour prendre un ticket depuis ici.");
-        }
-      },
-      (err) => {
-        let msg = "Impossible de vérifier ta position.";
-        if (err.code === err.PERMISSION_DENIED) msg = "Localisation refusée. Elle est nécessaire pour prendre un ticket depuis le salon.";
-        else if (err.code === err.TIMEOUT) msg = "La vérification a pris trop de temps, réessaie.";
-        showGeoFail(msg);
-      },
-      { enableHighAccuracy: true, timeout: 8000 }
-    );
-  }
-  function showGeoFail(message) {
-    el("geo-loading").style.display = "none";
-    el("geo-fail-msg").textContent = message;
-    el("geo-fail").style.display = "block";
-  }
-  function resetGeoFlow() {
-    el("geo-idle").style.display = "block";
-    el("geo-loading").style.display = "none";
-    el("geo-fail").style.display = "none";
-    el("name-form").style.display = "none";
-  }
-  el("geo-check-btn").addEventListener("click", checkPositionAndReveal);
-  el("geo-retry-btn").addEventListener("click", checkPositionAndReveal);
-
-  // ---------- actions ----------
-  async function joinQueue(name) {
-    try {
-      const ticket = await postAction({ action: "join", name: name, coiffeur: selectedCoiffeur });
-      myTicketId = ticket.id;
-      await loadState();
-    } catch (e) { console.error(e); }
-  }
-  async function leaveQueue(id) {
-    try {
-      await postAction({ action: "leave", id: id });
-      if (id === myTicketId) myTicketId = null;
-      await loadState();
-    } catch (e) { console.error(e); }
-  }
-
-  el("join-btn").addEventListener("click", () => {
-    const input = el("client-name");
-    const name = input.value.trim();
-    if (!name) { input.focus(); return; }
-    joinQueue(name);
-    input.value = "";
-    resetGeoFlow();
-  });
-  el("client-name").addEventListener("keydown", (e) => { if (e.key === "Enter") el("join-btn").click(); });
-  el("leave-btn").addEventListener("click", () => { if (myTicketId) { leaveQueue(myTicketId); resetGeoFlow(); } });
-
-  // ---------- render ----------
-  function render() {
-    renderPicker();
-    if (selectedCoiffeur) renderQueue();
-  }
-
-  function renderQueue() {
-    const list = ticketsFor(selectedCoiffeur);
-    const waiting = list.filter(t => t.status === "waiting");
-    const current = list.find(t => t.status === "called");
-    const myIndex = waiting.findIndex(t => t.id === myTicketId);
-
-    el("public-count").textContent = waiting.length;
-    el("public-wait").textContent = ((current ? 1 : 0) + waiting.length) * 30;
-
-    const joinCard = el("join-card");
-    const ticketWrap = el("my-ticket-wrap");
-    const publicRow = el("public-status-row");
-
-    if (myIndex >= 0) {
-      joinCard.style.display = "none";
-      publicRow.style.display = "none";
-      ticketWrap.style.display = "block";
-      const t = waiting[myIndex];
-      el("my-num").textContent = ticketLabel(t.num);
-      el("my-name").textContent = t.name;
-      el("my-joined").textContent = "arrivé à " + timeStr(t.joinedAt);
-      el("my-position").textContent = myIndex;
-      el("my-wait").textContent = ((current ? 1 : 0) + myIndex) * 30;
-    } else {
-      joinCard.style.display = "block";
-      publicRow.style.display = "flex";
-      ticketWrap.style.display = "none";
-    }
-
-    const listWrap = el("client-queue-list");
-    const rows = [];
-    if (current) {
-      rows.push(`<div class="mini-row"><div class="mini-num">${ticketLabel(current.num)}</div><div class="mname">${current.name}</div><div class="mwait">en cours</div></div>`);
-    }
-    waiting.forEach((t, i) => {
-      const est = ((current ? 1 : 0) + i + 1) * 30;
-      rows.push(`<div class="mini-row ${t.id === myTicketId ? 'me' : ''}"><div class="mini-num">${ticketLabel(t.num)}</div><div class="mname">${t.name}</div><div class="mwait">~${est} min</div></div>`);
+    wrap.innerHTML = waiting.map(t => `
+      <div class="qitem">
+        <div class="qnum">${ticketLabel(t.num)}</div>
+        <div class="qname">
+          <div class="n">${t.name}</div>
+          <div class="t">arrivé à ${timeStr(t.joinedAt)} · attend depuis ${minutesSince(t.joinedAt)} min</div>
+        </div>
+        <div class="qactions"><button data-drop="${t.id}">Retirer</button></div>
+      </div>
+    `).join("");
+    wrap.querySelectorAll("[data-drop]").forEach(btn => {
+      btn.addEventListener("click", () => {
+        postAction({ action: "leave", id: btn.getAttribute("data-drop") }).then(loadState);
+      });
     });
-    listWrap.innerHTML = rows.length ? rows.join("") : '<div class="empty">Personne dans la file pour le moment.<br>Sois le premier !</div>';
   }
-
-  loadState();
-  setInterval(loadState, 3000);
 })();
 </script>
 </body>
