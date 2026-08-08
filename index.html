@@ -259,14 +259,17 @@
   function renderPicker() {
     const wrap = el("picker-list");
     wrap.innerHTML = COIFFEURS.map(name => {
-      const list = ticketsFor(name).filter(t => t.status === "waiting");
+      const all = ticketsFor(name);
+      const list = all.filter(t => t.status === "waiting");
+      const current = all.find(t => t.status === "called");
+      const estWait = ((current ? 1 : 0) + list.length) * 30;
       const initials = name.split(" ").map(w => w[0]).join("").slice(0,2).toUpperCase();
       return `
         <button class="coiffeur-card" data-coiffeur="${name}">
           <div class="coiffeur-avatar">${initials}</div>
           <div class="coiffeur-info">
             <div class="cname">${name}</div>
-            <div class="cwait">${list.length * 30} min d'attente estimée</div>
+            <div class="cwait">${estWait} min d'attente estimée</div>
           </div>
           <div class="coiffeur-count">${list.length}</div>
         </button>
@@ -374,10 +377,11 @@
   function renderQueue() {
     const list = ticketsFor(selectedCoiffeur);
     const waiting = list.filter(t => t.status === "waiting");
+    const current = list.find(t => t.status === "called");
     const myIndex = waiting.findIndex(t => t.id === myTicketId);
 
     el("public-count").textContent = waiting.length;
-    el("public-wait").textContent = waiting.length * 30;
+    el("public-wait").textContent = ((current ? 1 : 0) + waiting.length) * 30;
 
     const joinCard = el("join-card");
     const ticketWrap = el("my-ticket-wrap");
@@ -392,7 +396,7 @@
       el("my-name").textContent = t.name;
       el("my-joined").textContent = "arrivé à " + timeStr(t.joinedAt);
       el("my-position").textContent = myIndex;
-      el("my-wait").textContent = myIndex * 30;
+      el("my-wait").textContent = ((current ? 1 : 0) + myIndex) * 30;
     } else {
       joinCard.style.display = "block";
       publicRow.style.display = "flex";
@@ -406,7 +410,8 @@
       rows.push(`<div class="mini-row"><div class="mini-num">${ticketLabel(current.num)}</div><div class="mname">${current.name}</div><div class="mwait">en cours</div></div>`);
     }
     waiting.forEach((t, i) => {
-      rows.push(`<div class="mini-row ${t.id === myTicketId ? 'me' : ''}"><div class="mini-num">${ticketLabel(t.num)}</div><div class="mname">${t.name}</div><div class="mwait">~${(i+1) * 30} min</div></div>`);
+      const est = ((current ? 1 : 0) + i + 1) * 30;
+      rows.push(`<div class="mini-row ${t.id === myTicketId ? 'me' : ''}"><div class="mini-num">${ticketLabel(t.num)}</div><div class="mname">${t.name}</div><div class="mwait">~${est} min</div></div>`);
     });
     listWrap.innerHTML = rows.length ? rows.join("") : '<div class="empty">Personne dans la file pour le moment.<br>Sois le premier !</div>';
   }
