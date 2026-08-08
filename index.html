@@ -404,7 +404,6 @@
     }
 
     const listWrap = el("client-queue-list");
-    const current = list.find(t => t.status === "called");
     const rows = [];
     if (current) {
       rows.push(`<div class="mini-row"><div class="mini-num">${ticketLabel(current.num)}</div><div class="mname">${current.name}</div><div class="mwait">en cours</div></div>`);
